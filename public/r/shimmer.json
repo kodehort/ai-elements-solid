@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "shimmer",
+  "type": "registry:ui",
+  "title": "Shimmer",
+  "description": "A shimmer effect for text",
+  "dependencies": [
+    "solid-motionone"
+  ],
+  "files": [
+    {
+      "path": "components/ui/shimmer.tsx",
+      "type": "registry:ui",
+      "content": "import { createMemo, type JSX, splitProps } from \"solid-js\";\nimport { Motion } from \"solid-motionone\";\nimport { cn } from \"@/lib/utils\";\n\nexport type TextShimmerProps = {\n  children: string;\n  as?: keyof JSX.IntrinsicElements;\n  class?: string;\n  duration?: number;\n  spread?: number;\n};\n\nexport function Shimmer(props: TextShimmerProps) {\n  const [local, others] = splitProps(props, [\n    \"children\",\n    \"as\",\n    \"class\",\n    \"duration\",\n    \"spread\",\n  ]);\n\n  const duration = () => local.duration ?? 2;\n  const spread = () => local.spread ?? 2;\n\n  const dynamicSpread = createMemo(\n    () => (local.children?.length ?? 0) * spread()\n  );\n\n  return (\n    <Motion.span\n      animate={{ backgroundPosition: \"0% center\" }}\n      class={cn(\n        \"relative inline-block bg-[length:250%_100%,auto] bg-clip-text text-transparent\",\n        \"[--bg:linear-gradient(90deg,#0000_calc(50%-var(--spread)),var(--color-background),#0000_calc(50%+var(--spread)))] [background-repeat:no-repeat,padding-box]\",\n        local.class\n      )}\n      initial={{ backgroundPosition: \"100% center\" }}\n      style={{\n        \"--spread\": `${dynamicSpread()}px`,\n        \"background-image\":\n          \"var(--bg), linear-gradient(var(--color-muted-foreground), var(--color-muted-foreground))\",\n      }}\n      transition={{\n        repeat: Number.POSITIVE_INFINITY,\n        duration: duration(),\n        easing: \"linear\",\n      }}\n      {...others}\n    >\n      {local.children}\n    </Motion.span>\n  );\n}\n"
+    }
+  ]
+}

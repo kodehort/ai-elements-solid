@@ -3,6 +3,9 @@
   "style": "new-york",
   "rsc": false,
   "tsx": true,
+  "registries": {
+    "@solid-ui": "https://www.solid-ui.com/r/{name}.json"
+  },
   "tailwind": {
     "config": "",
     "css": "src/app.css",
