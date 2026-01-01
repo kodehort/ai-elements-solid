@@ -1,4 +1,3 @@
-import { splitProps, type ParentProps, type JSX } from "solid-js";
 import { Button } from "@repo/solid-ui/components/ui/button";
 import {
   Collapsible,
@@ -6,28 +5,29 @@ import {
   CollapsibleTrigger,
 } from "@repo/solid-ui/components/ui/collapsible";
 import { ScrollArea } from "@repo/solid-ui/components/ui/scroll-area";
-import { cn } from "@/lib/utils";
 import { ChevronDownIcon, PaperclipIcon } from "lucide-solid";
+import { type JSX, type ParentProps, splitProps } from "solid-js";
+import { cn } from "@/lib/utils";
 
-export type QueueMessagePart = {
+export interface QueueMessagePart {
   type: string;
   text?: string;
   url?: string;
   filename?: string;
   mediaType?: string;
-};
+}
 
-export type QueueMessage = {
+export interface QueueMessage {
   id: string;
   parts: QueueMessagePart[];
-};
+}
 
-export type QueueTodo = {
+export interface QueueTodo {
   id: string;
   title: string;
   description?: string;
   status?: "pending" | "completed";
-};
+}
 
 export type QueueItemProps = JSX.LiHTMLAttributes<HTMLLIElement>;
 
@@ -116,7 +116,10 @@ export function QueueItemActions(props: QueueItemActionsProps) {
   return <div class={cn("flex gap-1", local.class)} {...others} />;
 }
 
-export type QueueItemActionProps = Omit<Parameters<typeof Button>[0], "variant" | "size">;
+export type QueueItemActionProps = Omit<
+  Parameters<typeof Button>[0],
+  "variant" | "size"
+>;
 
 export function QueueItemAction(props: QueueItemActionProps) {
   const [local, others] = splitProps(props, ["class"]);
@@ -140,7 +143,9 @@ export type QueueItemAttachmentProps = JSX.HTMLAttributes<HTMLDivElement>;
 export function QueueItemAttachment(props: QueueItemAttachmentProps) {
   const [local, others] = splitProps(props, ["class"]);
 
-  return <div class={cn("mt-1 flex flex-wrap gap-2", local.class)} {...others} />;
+  return (
+    <div class={cn("mt-1 flex flex-wrap gap-2", local.class)} {...others} />
+  );
 }
 
 export type QueueItemImageProps = JSX.ImgHTMLAttributes<HTMLImageElement>;
@@ -159,7 +164,9 @@ export function QueueItemImage(props: QueueItemImageProps) {
   );
 }
 
-export type QueueItemFileProps = ParentProps<JSX.HTMLAttributes<HTMLSpanElement>>;
+export type QueueItemFileProps = ParentProps<
+  JSX.HTMLAttributes<HTMLSpanElement>
+>;
 
 export function QueueItemFile(props: QueueItemFileProps) {
   const [local, others] = splitProps(props, ["children", "class"]);
@@ -184,7 +191,7 @@ export function QueueList(props: QueueListProps) {
   const [local, others] = splitProps(props, ["children", "class"]);
 
   return (
-    <ScrollArea class={cn("-mb-1 mt-2", local.class)} {...others}>
+    <ScrollArea class={cn("mt-2 -mb-1", local.class)} {...others}>
       <div class="max-h-40 pr-4">
         <ul>{local.children}</ul>
       </div>
@@ -198,11 +205,17 @@ export function QueueSection(props: QueueSectionProps) {
   const [local, others] = splitProps(props, ["class", "defaultOpen"]);
 
   return (
-    <Collapsible class={cn(local.class)} defaultOpen={local.defaultOpen ?? true} {...others} />
+    <Collapsible
+      class={cn(local.class)}
+      defaultOpen={local.defaultOpen ?? true}
+      {...others}
+    />
   );
 }
 
-export type QueueSectionTriggerProps = ParentProps<JSX.ButtonHTMLAttributes<HTMLButtonElement>>;
+export type QueueSectionTriggerProps = ParentProps<
+  JSX.ButtonHTMLAttributes<HTMLButtonElement>
+>;
 
 export function QueueSectionTrigger(props: QueueSectionTriggerProps) {
   const [local, others] = splitProps(props, ["children", "class"]);
@@ -229,11 +242,16 @@ export type QueueSectionLabelProps = JSX.HTMLAttributes<HTMLSpanElement> & {
 };
 
 export function QueueSectionLabel(props: QueueSectionLabelProps) {
-  const [local, others] = splitProps(props, ["count", "label", "icon", "class"]);
+  const [local, others] = splitProps(props, [
+    "count",
+    "label",
+    "icon",
+    "class",
+  ]);
 
   return (
     <span class={cn("flex items-center gap-2", local.class)} {...others}>
-      <ChevronDownIcon class="group-data-[state=closed]:-rotate-90 size-4 transition-transform" />
+      <ChevronDownIcon class="size-4 transition-transform group-data-[state=closed]:-rotate-90" />
       {local.icon}
       <span>
         {local.count} {local.label}

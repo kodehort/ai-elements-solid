@@ -1,15 +1,15 @@
-import {
-  createContext,
-  useContext,
-  splitProps,
-  Show,
-  type JSX,
-  type ParentProps,
-} from "solid-js";
 import { Alert, AlertDescription } from "@repo/solid-ui/components/ui/alert";
 import { Button } from "@repo/solid-ui/components/ui/button";
-import { cn } from "@/lib/utils";
 import type { ToolUIPart } from "ai";
+import {
+  createContext,
+  type JSX,
+  type ParentProps,
+  Show,
+  splitProps,
+  useContext,
+} from "solid-js";
+import { cn } from "@/lib/utils";
 
 type ToolUIPartApproval =
   | {
@@ -34,10 +34,10 @@ type ToolUIPartApproval =
     }
   | undefined;
 
-type ConfirmationContextValue = {
+interface ConfirmationContextValue {
   approval: ToolUIPartApproval;
   state: ToolUIPart["state"];
-};
+}
 
 const ConfirmationContext = createContext<ConfirmationContextValue | null>(
   null
@@ -57,7 +57,12 @@ export type ConfirmationProps = Parameters<typeof Alert>[0] & {
 };
 
 export function Confirmation(props: ConfirmationProps) {
-  const [local, others] = splitProps(props, ["class", "approval", "state", "children"]);
+  const [local, others] = splitProps(props, [
+    "class",
+    "approval",
+    "state",
+    "children",
+  ]);
 
   const shouldRender = () =>
     local.approval &&
@@ -65,14 +70,16 @@ export function Confirmation(props: ConfirmationProps) {
     local.state !== "input-available";
 
   return (
-    <Show when={shouldRender()}>
-      <ConfirmationContext.Provider
-        value={{ approval: local.approval!, state: local.state }}
-      >
-        <Alert class={cn("flex flex-col gap-2", local.class)} {...others}>
-          {local.children}
-        </Alert>
-      </ConfirmationContext.Provider>
+    <Show when={local.approval && shouldRender()}>
+      {(approval) => (
+        <ConfirmationContext.Provider
+          value={{ approval: approval(), state: local.state }}
+        >
+          <Alert class={cn("flex flex-col gap-2", local.class)} {...others}>
+            {local.children}
+          </Alert>
+        </ConfirmationContext.Provider>
+      )}
     </Show>
   );
 }
@@ -91,8 +98,7 @@ export function ConfirmationRequest(props: ConfirmationRequestProps) {
   const { state } = useConfirmation();
 
   // Only show when approval is requested
-  const isApprovalRequested = () =>
-    (state as string) === "approval-requested";
+  const isApprovalRequested = () => (state as string) === "approval-requested";
 
   return <Show when={isApprovalRequested()}>{props.children}</Show>;
 }
@@ -103,7 +109,9 @@ export function ConfirmationAccepted(props: ConfirmationAcceptedProps) {
   const { approval, state } = useConfirmation();
 
   const shouldShow = () => {
-    if (!approval?.approved) return false;
+    if (!approval?.approved) {
+      return false;
+    }
     const s = state as string;
     return (
       s === "approval-responded" ||
@@ -121,7 +129,9 @@ export function ConfirmationRejected(props: ConfirmationRejectedProps) {
   const { approval, state } = useConfirmation();
 
   const shouldShow = () => {
-    if (approval?.approved !== false) return false;
+    if (approval?.approved !== false) {
+      return false;
+    }
     const s = state as string;
     return (
       s === "approval-responded" ||
@@ -140,8 +150,7 @@ export function ConfirmationActions(props: ConfirmationActionsProps) {
   const { state } = useConfirmation();
 
   // Only show when approval is requested
-  const isApprovalRequested = () =>
-    (state as string) === "approval-requested";
+  const isApprovalRequested = () => (state as string) === "approval-requested";
 
   return (
     <Show when={isApprovalRequested()}>

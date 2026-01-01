@@ -26,12 +26,12 @@ import {
 } from "solid-js";
 import { cn } from "@/lib/utils";
 
-export type WebPreviewContextValue = {
+export interface WebPreviewContextValue {
   url: Accessor<string>;
   setUrl: (url: string) => void;
   consoleOpen: Accessor<boolean>;
   setConsoleOpen: Setter<boolean>;
-};
+}
 
 const WebPreviewContext = createContext<WebPreviewContextValue | null>(null);
 

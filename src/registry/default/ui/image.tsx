@@ -1,4 +1,4 @@
-import { splitProps, type JSX } from "solid-js";
+import { type JSX, splitProps } from "solid-js";
 import { cn } from "@/lib/utils";
 
 export type ImageProps = {
@@ -11,7 +11,14 @@ export type ImageProps = {
 } & Omit<JSX.ImgHTMLAttributes<HTMLImageElement>, "src">;
 
 export function Image(props: ImageProps) {
-  const [local, others] = splitProps(props, ["base64", "uint8Array", "mediaType", "src", "class", "alt"]);
+  const [local, others] = splitProps(props, [
+    "base64",
+    "uint8Array",
+    "mediaType",
+    "src",
+    "class",
+    "alt",
+  ]);
 
   const imageSrc = () => {
     if (local.src) {
@@ -24,6 +31,7 @@ export function Image(props: ImageProps) {
   };
 
   return (
+    // biome-ignore lint/correctness/useImageSize: dynamic dimensions passed via others
     <img
       alt={local.alt}
       class={cn("h-auto max-w-full overflow-hidden rounded-md", local.class)}

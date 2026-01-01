@@ -2,13 +2,13 @@ import { createMemo, type JSX, splitProps } from "solid-js";
 import { Motion } from "solid-motionone";
 import { cn } from "@/lib/utils";
 
-export type TextShimmerProps = {
+export interface TextShimmerProps {
   children: string;
   as?: keyof JSX.IntrinsicElements;
   class?: string;
   duration?: number;
   spread?: number;
-};
+}
 
 export function Shimmer(props: TextShimmerProps) {
   const [local, others] = splitProps(props, [

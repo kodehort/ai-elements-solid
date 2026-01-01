@@ -1,10 +1,10 @@
-import { createSignal, type Accessor, type Setter } from "solid-js";
+import { type Accessor, createSignal, type Setter } from "solid-js";
 
-export type CreateControllableStateParams<T> = {
+export interface CreateControllableStateParams<T> {
   prop?: T;
   defaultProp?: T;
   onChange?: (value: T) => void;
-};
+}
 
 /**
  * Manages state that can be either controlled or uncontrolled.

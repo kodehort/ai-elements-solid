@@ -1,13 +1,13 @@
-import { splitProps, Show, type JSX, type ParentProps, type Component } from "solid-js";
+import { X } from "lucide-solid";
+import { type Component, type JSX, Show, splitProps } from "solid-js";
 import { Dynamic } from "solid-js/web";
-import { Button } from "@repo/solid-ui/components/ui/button";
+import { Button } from "@/components/ui/button";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@repo/solid-ui/components/ui/tooltip";
+} from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
-import { X } from "lucide-solid";
 
 export type ArtifactProps = JSX.HTMLAttributes<HTMLDivElement>;
 
@@ -48,7 +48,12 @@ export function ArtifactHeader(props: ArtifactHeaderProps) {
 export type ArtifactCloseProps = Parameters<typeof Button>[0];
 
 export function ArtifactClose(props: ArtifactCloseProps) {
-  const [local, others] = splitProps(props, ["class", "children", "size", "variant"]);
+  const [local, others] = splitProps(props, [
+    "class",
+    "children",
+    "size",
+    "variant",
+  ]);
 
   return (
     <Button
@@ -73,7 +78,10 @@ export function ArtifactTitle(props: ArtifactTitleProps) {
   const [local, others] = splitProps(props, ["class", "children"]);
 
   return (
-    <p class={cn("font-medium text-foreground text-sm", local.class)} {...others}>
+    <p
+      class={cn("font-medium text-foreground text-sm", local.class)}
+      {...others}
+    >
       {local.children}
     </p>
   );
@@ -131,15 +139,15 @@ export function ArtifactAction(props: ArtifactActionProps) {
       variant={local.variant ?? "ghost"}
       {...others}
     >
-      <Show when={local.icon} fallback={local.children}>
-        <Dynamic component={local.icon} class="size-4" />
+      <Show fallback={local.children} when={local.icon}>
+        <Dynamic class="size-4" component={local.icon} />
       </Show>
       <span class="sr-only">{local.label || local.tooltip}</span>
     </Button>
   );
 
   return (
-    <Show when={local.tooltip} fallback={button}>
+    <Show fallback={button} when={local.tooltip}>
       <Tooltip>
         <TooltipTrigger as="span">{button}</TooltipTrigger>
         <TooltipContent>

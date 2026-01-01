@@ -1,10 +1,3 @@
-import {
-  splitProps,
-  type ParentProps,
-  createContext,
-  useContext,
-  Show,
-} from "solid-js";
 import { Button } from "@repo/solid-ui/components/ui/button";
 import {
   Card,
@@ -20,13 +13,14 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@repo/solid-ui/components/ui/collapsible";
-import { cn } from "@/lib/utils";
 import { ChevronsUpDownIcon } from "lucide-solid";
+import { createContext, Show, splitProps, useContext } from "solid-js";
+import { cn } from "@/lib/utils";
 import { Shimmer } from "./shimmer";
 
-type PlanContextValue = {
+interface PlanContextValue {
   isStreaming: boolean;
-};
+}
 
 const PlanContext = createContext<PlanContextValue>();
 
@@ -43,7 +37,11 @@ export type PlanProps = Parameters<typeof Collapsible>[0] & {
 };
 
 export function Plan(props: PlanProps) {
-  const [local, others] = splitProps(props, ["class", "isStreaming", "children"]);
+  const [local, others] = splitProps(props, [
+    "class",
+    "isStreaming",
+    "children",
+  ]);
 
   return (
     <PlanContext.Provider value={{ isStreaming: local.isStreaming ?? false }}>
@@ -68,7 +66,10 @@ export function PlanHeader(props: PlanHeaderProps) {
   );
 }
 
-export type PlanTitleProps = Omit<Parameters<typeof CardTitle>[0], "children"> & {
+export type PlanTitleProps = Omit<
+  Parameters<typeof CardTitle>[0],
+  "children"
+> & {
   children: string;
 };
 
@@ -78,14 +79,17 @@ export function PlanTitle(props: PlanTitleProps) {
 
   return (
     <CardTitle data-slot="plan-title" {...others}>
-      <Show when={isStreaming} fallback={local.children}>
+      <Show fallback={local.children} when={isStreaming}>
         <Shimmer>{local.children}</Shimmer>
       </Show>
     </CardTitle>
   );
 }
 
-export type PlanDescriptionProps = Omit<Parameters<typeof CardDescription>[0], "children"> & {
+export type PlanDescriptionProps = Omit<
+  Parameters<typeof CardDescription>[0],
+  "children"
+> & {
   children: string;
 };
 
@@ -99,7 +103,7 @@ export function PlanDescription(props: PlanDescriptionProps) {
       data-slot="plan-description"
       {...others}
     >
-      <Show when={isStreaming} fallback={local.children}>
+      <Show fallback={local.children} when={isStreaming}>
         <Shimmer>{local.children}</Shimmer>
       </Show>
     </CardDescription>

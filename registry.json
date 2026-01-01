@@ -4,6 +4,52 @@
   "homepage": "https://acme.com",
   "items": [
     {
+      "name": "artifact",
+      "type": "registry:ui",
+      "title": "Artifact",
+      "description": "Render generatred artifact",
+      "dependencies": ["lucide-solid"],
+      "files": [
+        {
+          "path": "src/registry/default/ui/artifact.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/artifact.tsx"
+        }
+      ],
+      "registryDependencies": [
+        "https://www.solid-ui.com/r/button.json",
+        "https://www.solid-ui.com/r/tooltip.json"
+      ]
+    },
+    {
+      "name": "code-block",
+      "type": "registry:ui",
+      "title": "CodeBlock",
+      "description": "Render and syntax highlight code",
+      "dependencies": ["lucide-solid", "shiki"],
+      "files": [
+        {
+          "path": "src/registry/default/ui/code-block.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/code-block.tsx"
+        }
+      ],
+      "registryDependencies": ["https://www.solid-ui.com/r/button.json"]
+    },
+    {
+      "name": "image",
+      "type": "registry:ui",
+      "title": "Image",
+      "description": "Render and AI generated image",
+      "files": [
+        {
+          "path": "src/registry/default/ui/image.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/image.tsx"
+        }
+      ]
+    },
+    {
       "name": "loader",
       "type": "registry:ui",
       "title": "Loader",
@@ -28,6 +74,24 @@
           "type": "registry:ui",
           "target": "components/ui/shimmer.tsx"
         }
+      ]
+    },
+    {
+      "name": "tool",
+      "type": "registry:ui",
+      "title": "Tool",
+      "description": "An AI Tool call",
+      "dependencies": ["lucide-solid"],
+      "files": [
+        {
+          "path": "src/registry/default/ui/tool.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/tool.tsx"
+        }
+      ],
+      "registryDependencies": [
+        "https://www.solid-ui.com/r/badge.json",
+        "https://www.solid-ui.com/r/collapsible.json"
       ]
     }
   ]

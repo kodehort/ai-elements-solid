@@ -1,4 +1,3 @@
-import { createContext, useContext, splitProps, type JSX, type ParentProps } from "solid-js";
 import { Button } from "@repo/solid-ui/components/ui/button";
 import {
   DropdownMenu,
@@ -8,8 +7,14 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@repo/solid-ui/components/ui/dropdown-menu";
-import { cn } from "@/lib/utils";
 import { ChevronDown, ExternalLink, MessageCircle } from "lucide-solid";
+import {
+  createContext,
+  type ParentProps,
+  splitProps,
+  useContext,
+} from "solid-js";
+import { cn } from "@/lib/utils";
 
 const providers = {
   github: {
@@ -24,8 +29,7 @@ const providers = {
   },
   scira: {
     title: "Open in Scira",
-    createUrl: (q: string) =>
-      `https://scira.ai/?${new URLSearchParams({ q })}`,
+    createUrl: (q: string) => `https://scira.ai/?${new URLSearchParams({ q })}`,
     icon: (
       <svg
         fill="none"
@@ -132,8 +136,7 @@ const providers = {
   },
   v0: {
     title: "Open in v0",
-    createUrl: (q: string) =>
-      `https://v0.app?${new URLSearchParams({ q })}`,
+    createUrl: (q: string) => `https://v0.app?${new URLSearchParams({ q })}`,
     icon: (
       <svg
         fill="currentColor"
@@ -169,7 +172,9 @@ const providers = {
   },
 };
 
-type OpenInContextValue = { query: string };
+interface OpenInContextValue {
+  query: string;
+}
 
 const OpenInContext = createContext<OpenInContextValue>();
 

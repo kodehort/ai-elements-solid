@@ -1,8 +1,17 @@
-import { splitProps, Show, type JSX, type ParentProps, type Accessor } from "solid-js";
 import { Button } from "@repo/solid-ui/components/ui/button";
-import { cn } from "@/lib/utils";
 import { ArrowDown } from "lucide-solid";
-import { createStickToBottom, type UseStickToBottomOptions } from "./primitives/create-stick-to-bottom";
+import {
+  type Accessor,
+  type JSX,
+  type ParentProps,
+  Show,
+  splitProps,
+} from "solid-js";
+import { cn } from "@/lib/utils";
+import {
+  createStickToBottom,
+  type UseStickToBottomOptions,
+} from "./primitives/create-stick-to-bottom";
 
 export type ConversationProps = ParentProps<
   JSX.HTMLAttributes<HTMLDivElement> & {
@@ -30,18 +39,17 @@ export function Conversation(props: ConversationProps) {
   });
 
   const isAtBottom = () => local.isAtBottom?.() ?? ownControls.isAtBottom();
-  const scrollToBottom = () => local.scrollToBottom?.() ?? ownControls.scrollToBottom();
+  const scrollToBottom = () =>
+    local.scrollToBottom?.() ?? ownControls.scrollToBottom();
 
   return (
     <div
-      ref={ownControls.scrollRef}
       class={cn("relative flex-1 overflow-y-auto", local.class)}
+      ref={ownControls.scrollRef}
       role="log"
       {...others}
     >
-      <div ref={ownControls.contentRef}>
-        {local.children}
-      </div>
+      <div ref={ownControls.contentRef}>{local.children}</div>
       <Show when={!isAtBottom()}>
         <Button
           class="absolute bottom-4 left-[50%] translate-x-[-50%] rounded-full"
@@ -57,7 +65,9 @@ export function Conversation(props: ConversationProps) {
   );
 }
 
-export type ConversationContentProps = ParentProps<JSX.HTMLAttributes<HTMLDivElement>>;
+export type ConversationContentProps = ParentProps<
+  JSX.HTMLAttributes<HTMLDivElement>
+>;
 
 export function ConversationContent(props: ConversationContentProps) {
   const [local, others] = splitProps(props, ["class", "children"]);
@@ -69,7 +79,9 @@ export function ConversationContent(props: ConversationContentProps) {
   );
 }
 
-export type ConversationEmptyStateProps = ParentProps<JSX.HTMLAttributes<HTMLDivElement>> & {
+export type ConversationEmptyStateProps = ParentProps<
+  JSX.HTMLAttributes<HTMLDivElement>
+> & {
   title?: string;
   description?: string;
   icon?: JSX.Element;
@@ -92,12 +104,14 @@ export function ConversationEmptyState(props: ConversationEmptyStateProps) {
       )}
       {...others}
     >
-      <Show when={!local.children} fallback={local.children}>
+      <Show fallback={local.children} when={!local.children}>
         <Show when={local.icon}>
           <div class="text-muted-foreground">{local.icon}</div>
         </Show>
         <div class="space-y-1">
-          <h3 class="font-medium text-sm">{local.title ?? "No messages yet"}</h3>
+          <h3 class="font-medium text-sm">
+            {local.title ?? "No messages yet"}
+          </h3>
           <Show when={local.description}>
             <p class="text-muted-foreground text-sm">
               {local.description ?? "Start a conversation to see messages here"}

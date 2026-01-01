@@ -1,16 +1,3 @@
-import {
-  createContext,
-  useContext,
-  createSignal,
-  createEffect,
-  splitProps,
-  Show,
-  For,
-  Index,
-  type JSX,
-  type ParentProps,
-  type Accessor,
-} from "solid-js";
 import { Button } from "@repo/solid-ui/components/ui/button";
 import {
   ButtonGroup,
@@ -21,9 +8,21 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@repo/solid-ui/components/ui/tooltip";
-import { cn } from "@/lib/utils";
 import type { FileUIPart, UIMessage } from "ai";
 import { ChevronLeft, ChevronRight, Paperclip, X } from "lucide-solid";
+import {
+  type Accessor,
+  createContext,
+  createEffect,
+  createSignal,
+  Index,
+  type JSX,
+  type ParentProps,
+  Show,
+  splitProps,
+  useContext,
+} from "solid-js";
+import { cn } from "@/lib/utils";
 
 export type MessageProps = ParentProps<JSX.HTMLAttributes<HTMLDivElement>> & {
   from: UIMessage["role"];
@@ -46,7 +45,9 @@ export function Message(props: MessageProps) {
   );
 }
 
-export type MessageContentProps = ParentProps<JSX.HTMLAttributes<HTMLDivElement>>;
+export type MessageContentProps = ParentProps<
+  JSX.HTMLAttributes<HTMLDivElement>
+>;
 
 export function MessageContent(props: MessageContentProps) {
   const [local, others] = splitProps(props, ["children", "class"]);
@@ -54,7 +55,7 @@ export function MessageContent(props: MessageContentProps) {
   return (
     <div
       class={cn(
-        "is-user:dark flex w-fit max-w-full min-w-0 flex-col gap-2 overflow-hidden text-sm",
+        "is-user:dark flex w-fit min-w-0 max-w-full flex-col gap-2 overflow-hidden text-sm",
         "group-[.is-user]:ml-auto group-[.is-user]:rounded-lg group-[.is-user]:bg-secondary group-[.is-user]:px-4 group-[.is-user]:py-3 group-[.is-user]:text-foreground",
         "group-[.is-assistant]:text-foreground",
         local.class
@@ -66,7 +67,9 @@ export function MessageContent(props: MessageContentProps) {
   );
 }
 
-export type MessageActionsProps = ParentProps<JSX.HTMLAttributes<HTMLDivElement>>;
+export type MessageActionsProps = ParentProps<
+  JSX.HTMLAttributes<HTMLDivElement>
+>;
 
 export function MessageActions(props: MessageActionsProps) {
   const [local, others] = splitProps(props, ["class", "children"]);
@@ -105,7 +108,7 @@ export function MessageAction(props: MessageActionProps) {
   );
 
   return (
-    <Show when={local.tooltip} fallback={button}>
+    <Show fallback={button} when={local.tooltip}>
       <Tooltip>
         <TooltipTrigger as="span">{button}</TooltipTrigger>
         <TooltipContent>
@@ -117,26 +120,32 @@ export function MessageAction(props: MessageActionProps) {
 }
 
 // Branch Context
-type MessageBranchContextType = {
+interface MessageBranchContextType {
   currentBranch: Accessor<number>;
   totalBranches: Accessor<number>;
   goToPrevious: () => void;
   goToNext: () => void;
   branches: Accessor<JSX.Element[]>;
   setBranches: (branches: JSX.Element[]) => void;
-};
+}
 
-const MessageBranchContext = createContext<MessageBranchContextType | null>(null);
+const MessageBranchContext = createContext<MessageBranchContextType | null>(
+  null
+);
 
 function useMessageBranch() {
   const context = useContext(MessageBranchContext);
   if (!context) {
-    throw new Error("MessageBranch components must be used within MessageBranch");
+    throw new Error(
+      "MessageBranch components must be used within MessageBranch"
+    );
   }
   return context;
 }
 
-export type MessageBranchProps = ParentProps<JSX.HTMLAttributes<HTMLDivElement>> & {
+export type MessageBranchProps = ParentProps<
+  JSX.HTMLAttributes<HTMLDivElement>
+> & {
   defaultBranch?: number;
   onBranchChange?: (branchIndex: number) => void;
 };
@@ -149,7 +158,9 @@ export function MessageBranch(props: MessageBranchProps) {
     "children",
   ]);
 
-  const [currentBranch, setCurrentBranch] = createSignal(local.defaultBranch ?? 0);
+  const [currentBranch, setCurrentBranch] = createSignal(
+    local.defaultBranch ?? 0
+  );
   const [branches, setBranches] = createSignal<JSX.Element[]>([]);
 
   const handleBranchChange = (newBranch: number) => {
@@ -190,7 +201,9 @@ export function MessageBranch(props: MessageBranchProps) {
   );
 }
 
-export type MessageBranchContentProps = ParentProps<JSX.HTMLAttributes<HTMLDivElement>>;
+export type MessageBranchContentProps = ParentProps<
+  JSX.HTMLAttributes<HTMLDivElement>
+>;
 
 export function MessageBranchContent(props: MessageBranchContentProps) {
   const [local, others] = splitProps(props, ["children"]);
@@ -199,7 +212,10 @@ export function MessageBranchContent(props: MessageBranchContentProps) {
   // Convert children to array
   const childrenArray = () => {
     const c = local.children;
-    return Array.isArray(c) ? c : c ? [c] : [];
+    if (Array.isArray(c)) {
+      return c;
+    }
+    return c ? [c] : [];
   };
 
   // Update branches when children change
@@ -232,7 +248,7 @@ export type MessageBranchSelectorProps = JSX.HTMLAttributes<HTMLDivElement> & {
 };
 
 export function MessageBranchSelector(props: MessageBranchSelectorProps) {
-  const [local, others] = splitProps(props, ["class", "from"]);
+  const [_local, others] = splitProps(props, ["class", "from"]);
   const { totalBranches } = useMessageBranch();
 
   return (
@@ -307,7 +323,9 @@ export function MessageBranchPage(props: MessageBranchPageProps) {
   );
 }
 
-export type MessageResponseProps = ParentProps<JSX.HTMLAttributes<HTMLDivElement>> & {
+export type MessageResponseProps = ParentProps<
+  JSX.HTMLAttributes<HTMLDivElement>
+> & {
   children: string;
 };
 
@@ -350,11 +368,13 @@ export function MessageAttachment(props: MessageAttachmentProps) {
       {...others}
     >
       <Show
-        when={isImage()}
         fallback={
           <>
             <Tooltip>
-              <TooltipTrigger as="div" class="flex size-full shrink-0 items-center justify-center rounded-lg bg-muted text-muted-foreground">
+              <TooltipTrigger
+                as="div"
+                class="flex size-full shrink-0 items-center justify-center rounded-lg bg-muted text-muted-foreground"
+              >
                 <Paperclip class="size-4" />
               </TooltipTrigger>
               <TooltipContent>
@@ -378,6 +398,7 @@ export function MessageAttachment(props: MessageAttachmentProps) {
             </Show>
           </>
         }
+        when={isImage()}
       >
         <img
           alt={filename() || "attachment"}
@@ -406,7 +427,9 @@ export function MessageAttachment(props: MessageAttachmentProps) {
   );
 }
 
-export type MessageAttachmentsProps = ParentProps<JSX.HTMLAttributes<HTMLDivElement>>;
+export type MessageAttachmentsProps = ParentProps<
+  JSX.HTMLAttributes<HTMLDivElement>
+>;
 
 export function MessageAttachments(props: MessageAttachmentsProps) {
   const [local, others] = splitProps(props, ["children", "class"]);
@@ -414,7 +437,10 @@ export function MessageAttachments(props: MessageAttachmentsProps) {
   return (
     <Show when={local.children}>
       <div
-        class={cn("ml-auto flex w-fit flex-wrap items-start gap-2", local.class)}
+        class={cn(
+          "ml-auto flex w-fit flex-wrap items-start gap-2",
+          local.class
+        )}
         {...others}
       >
         {local.children}
@@ -423,7 +449,9 @@ export function MessageAttachments(props: MessageAttachmentsProps) {
   );
 }
 
-export type MessageToolbarProps = ParentProps<JSX.HTMLAttributes<HTMLDivElement>>;
+export type MessageToolbarProps = ParentProps<
+  JSX.HTMLAttributes<HTMLDivElement>
+>;
 
 export function MessageToolbar(props: MessageToolbarProps) {
   const [local, others] = splitProps(props, ["class", "children"]);

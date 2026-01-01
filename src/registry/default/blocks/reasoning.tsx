@@ -1,31 +1,31 @@
 import {
-  createContext,
-  useContext,
-  createSignal,
-  createEffect,
-  onCleanup,
-  splitProps,
-  Show,
-  type JSX,
-  type ParentProps,
-  type Accessor,
-} from "solid-js";
-import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@repo/solid-ui/components/ui/collapsible";
-import { cn } from "@/lib/utils";
 import { Brain, ChevronDown } from "lucide-solid";
-import { Shimmer } from "./shimmer";
+import {
+  type Accessor,
+  createContext,
+  createEffect,
+  createSignal,
+  type JSX,
+  onCleanup,
+  type ParentProps,
+  Show,
+  splitProps,
+  useContext,
+} from "solid-js";
+import { cn } from "@/lib/utils";
 import { createControllableState } from "./primitives/create-controllable-state";
+import { Shimmer } from "./shimmer";
 
-type ReasoningContextValue = {
+interface ReasoningContextValue {
   isStreaming: boolean;
   isOpen: Accessor<boolean | undefined>;
   setIsOpen: (open: boolean) => void;
   duration: Accessor<number | undefined>;
-};
+}
 
 const ReasoningContext = createContext<ReasoningContextValue | null>(null);
 
@@ -76,12 +76,13 @@ export function Reasoning(props: ReasoningProps) {
   // Track duration when streaming starts and ends
   createEffect(() => {
     const streaming = local.isStreaming ?? false;
+    const start = startTime();
     if (streaming) {
-      if (startTime() === null) {
+      if (start === null) {
         setStartTime(Date.now());
       }
-    } else if (startTime() !== null) {
-      setDuration(Math.ceil((Date.now() - startTime()!) / MS_IN_S));
+    } else if (start !== null) {
+      setDuration(Math.ceil((Date.now() - start) / MS_IN_S));
       setStartTime(null);
     }
   });
@@ -163,7 +164,7 @@ export function ReasoningTrigger(props: ReasoningTriggerProps) {
       )}
       {...others}
     >
-      <Show when={!local.children} fallback={local.children}>
+      <Show fallback={local.children} when={!local.children}>
         <Brain class="size-4" />
         {getMessage(isStreaming, duration())}
         <ChevronDown

@@ -1,4 +1,4 @@
-import { splitProps, type JSX, type ParentProps } from "solid-js";
+import { type JSX, type ParentProps, splitProps } from "solid-js";
 import {
   Command,
   CommandEmpty,
@@ -40,7 +40,9 @@ export function ModelSelectorContent(props: ModelSelectorContentProps) {
 
   return (
     <DialogContent class={cn("p-0", local.class)} {...others}>
-      <DialogTitle class="sr-only">{local.title ?? "Model Selector"}</DialogTitle>
+      <DialogTitle class="sr-only">
+        {local.title ?? "Model Selector"}
+      </DialogTitle>
       <Command class="**:data-[slot=command-input-wrapper]:h-auto">
         {local.children}
       </Command>
@@ -86,7 +88,9 @@ export function ModelSelectorShortcut(props: ModelSelectorShortcutProps) {
   return <CommandShortcut {...props} />;
 }
 
-export type ModelSelectorSeparatorProps = Parameters<typeof CommandSeparator>[0];
+export type ModelSelectorSeparatorProps = Parameters<
+  typeof CommandSeparator
+>[0];
 
 export function ModelSelectorSeparator(props: ModelSelectorSeparatorProps) {
   return <CommandSeparator {...props} />;
@@ -179,7 +183,7 @@ export function ModelSelectorLogoGroup(props: ModelSelectorLogoGroupProps) {
   return (
     <div
       class={cn(
-        "-space-x-1 flex shrink-0 items-center [&>img]:rounded-full [&>img]:bg-background [&>img]:p-px [&>img]:ring-1 dark:[&>img]:bg-foreground",
+        "flex shrink-0 items-center -space-x-1 [&>img]:rounded-full [&>img]:bg-background [&>img]:p-px [&>img]:ring-1 dark:[&>img]:bg-foreground",
         local.class
       )}
       {...others}

@@ -1,4 +1,3 @@
-import { Button } from "@repo/solid-ui/components/ui/button";
 import { Check, Copy } from "lucide-solid";
 import { type BundledLanguage, codeToHtml, type ShikiTransformer } from "shiki";
 import {
@@ -11,6 +10,7 @@ import {
   splitProps,
   useContext,
 } from "solid-js";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 type CodeBlockProps = ParentProps<JSX.HTMLAttributes<HTMLDivElement>> & {
@@ -19,9 +19,9 @@ type CodeBlockProps = ParentProps<JSX.HTMLAttributes<HTMLDivElement>> & {
   showLineNumbers?: boolean;
 };
 
-type CodeBlockContextType = {
+interface CodeBlockContextType {
   code: string;
-};
+}
 
 const CodeBlockContext = createContext<CodeBlockContextType>({
   code: "",

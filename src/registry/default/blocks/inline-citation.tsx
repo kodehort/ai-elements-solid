@@ -1,11 +1,3 @@
-import {
-  createEffect,
-  onCleanup,
-  splitProps,
-  Show,
-  type JSX,
-  type ParentProps,
-} from "solid-js";
 import { Badge } from "@repo/solid-ui/components/ui/badge";
 import {
   Carousel,
@@ -18,8 +10,9 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@repo/solid-ui/components/ui/hover-card";
-import { cn } from "@/lib/utils";
 import { ArrowLeft, ArrowRight } from "lucide-solid";
+import { type JSX, type ParentProps, Show, splitProps } from "solid-js";
+import { cn } from "@/lib/utils";
 
 export type InlineCitationProps = JSX.HTMLAttributes<HTMLSpanElement>;
 
@@ -27,7 +20,10 @@ export function InlineCitation(props: InlineCitationProps) {
   const [local, others] = splitProps(props, ["class", "children"]);
 
   return (
-    <span class={cn("group inline items-center gap-1", local.class)} {...others}>
+    <span
+      class={cn("group inline items-center gap-1", local.class)}
+      {...others}
+    >
       {local.children}
     </span>
   );
@@ -58,7 +54,9 @@ export type InlineCitationCardTriggerProps = Parameters<typeof Badge>[0] & {
   sources: string[];
 };
 
-export function InlineCitationCardTrigger(props: InlineCitationCardTriggerProps) {
+export function InlineCitationCardTrigger(
+  props: InlineCitationCardTriggerProps
+) {
   const [local, others] = splitProps(props, ["sources", "class", "children"]);
 
   const hostname = () => {
@@ -76,7 +74,7 @@ export function InlineCitationCardTrigger(props: InlineCitationCardTriggerProps)
         variant="secondary"
         {...others}
       >
-        <Show when={local.sources[0]} fallback="unknown">
+        <Show fallback="unknown" when={local.sources[0]}>
           {hostname()}{" "}
           <Show when={local.sources.length > 1}>
             +{local.sources.length - 1}
@@ -111,7 +109,8 @@ export function InlineCitationCarousel(props: InlineCitationCarouselProps) {
   );
 }
 
-export type InlineCitationCarouselContentProps = JSX.HTMLAttributes<HTMLDivElement>;
+export type InlineCitationCarouselContentProps =
+  JSX.HTMLAttributes<HTMLDivElement>;
 
 export function InlineCitationCarouselContent(
   props: InlineCitationCarouselContentProps
@@ -119,21 +118,30 @@ export function InlineCitationCarouselContent(
   return <CarouselContent {...props} />;
 }
 
-export type InlineCitationCarouselItemProps = JSX.HTMLAttributes<HTMLDivElement>;
+export type InlineCitationCarouselItemProps =
+  JSX.HTMLAttributes<HTMLDivElement>;
 
-export function InlineCitationCarouselItem(props: InlineCitationCarouselItemProps) {
+export function InlineCitationCarouselItem(
+  props: InlineCitationCarouselItemProps
+) {
   const [local, others] = splitProps(props, ["class", "children"]);
 
   return (
-    <CarouselItem class={cn("w-full space-y-2 p-4 pl-8", local.class)} {...others}>
+    <CarouselItem
+      class={cn("w-full space-y-2 p-4 pl-8", local.class)}
+      {...others}
+    >
       {local.children}
     </CarouselItem>
   );
 }
 
-export type InlineCitationCarouselHeaderProps = JSX.HTMLAttributes<HTMLDivElement>;
+export type InlineCitationCarouselHeaderProps =
+  JSX.HTMLAttributes<HTMLDivElement>;
 
-export function InlineCitationCarouselHeader(props: InlineCitationCarouselHeaderProps) {
+export function InlineCitationCarouselHeader(
+  props: InlineCitationCarouselHeaderProps
+) {
   const [local, others] = splitProps(props, ["class", "children"]);
 
   return (
@@ -153,7 +161,9 @@ export type InlineCitationCarouselIndexProps = ParentProps<
   JSX.HTMLAttributes<HTMLDivElement>
 >;
 
-export function InlineCitationCarouselIndex(props: InlineCitationCarouselIndexProps) {
+export function InlineCitationCarouselIndex(
+  props: InlineCitationCarouselIndexProps
+) {
   const [local, others] = splitProps(props, ["children", "class"]);
   const { api } = useCarousel();
 
@@ -180,9 +190,12 @@ export function InlineCitationCarouselIndex(props: InlineCitationCarouselIndexPr
   );
 }
 
-export type InlineCitationCarouselPrevProps = JSX.ButtonHTMLAttributes<HTMLButtonElement>;
+export type InlineCitationCarouselPrevProps =
+  JSX.ButtonHTMLAttributes<HTMLButtonElement>;
 
-export function InlineCitationCarouselPrev(props: InlineCitationCarouselPrevProps) {
+export function InlineCitationCarouselPrev(
+  props: InlineCitationCarouselPrevProps
+) {
   const [local, others] = splitProps(props, ["class"]);
   const { scrollPrev } = useCarousel();
 
@@ -199,9 +212,12 @@ export function InlineCitationCarouselPrev(props: InlineCitationCarouselPrevProp
   );
 }
 
-export type InlineCitationCarouselNextProps = JSX.ButtonHTMLAttributes<HTMLButtonElement>;
+export type InlineCitationCarouselNextProps =
+  JSX.ButtonHTMLAttributes<HTMLButtonElement>;
 
-export function InlineCitationCarouselNext(props: InlineCitationCarouselNextProps) {
+export function InlineCitationCarouselNext(
+  props: InlineCitationCarouselNextProps
+) {
   const [local, others] = splitProps(props, ["class"]);
   const { scrollNext } = useCarousel();
 
@@ -236,10 +252,14 @@ export function InlineCitationSource(props: InlineCitationSourceProps) {
   return (
     <div class={cn("space-y-1", local.class)} {...others}>
       <Show when={local.title}>
-        <h4 class="truncate font-medium text-sm leading-tight">{local.title}</h4>
+        <h4 class="truncate font-medium text-sm leading-tight">
+          {local.title}
+        </h4>
       </Show>
       <Show when={local.url}>
-        <p class="truncate break-all text-muted-foreground text-xs">{local.url}</p>
+        <p class="truncate break-all text-muted-foreground text-xs">
+          {local.url}
+        </p>
       </Show>
       <Show when={local.description}>
         <p class="line-clamp-3 text-muted-foreground text-sm leading-relaxed">

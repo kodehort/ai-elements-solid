@@ -1,9 +1,3 @@
-import { Badge } from "@repo/solid-ui/components/ui/badge";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@repo/solid-ui/components/ui/collapsible";
 import type { ToolUIPart } from "ai";
 import {
   CheckCircle,
@@ -14,7 +8,14 @@ import {
   XCircle,
 } from "lucide-solid";
 import { type JSX, Show, splitProps } from "solid-js";
+import { Badge } from "@/components/ui/badge";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import { cn } from "@/lib/utils";
+
 import { CodeBlock } from "./code-block";
 
 export type ToolProps = Parameters<typeof Collapsible>[0];
@@ -32,12 +33,12 @@ export function Tool(props: ToolProps) {
   );
 }
 
-export type ToolHeaderProps = {
+export interface ToolHeaderProps {
   title?: string;
   type: ToolUIPart["type"];
   state: ToolUIPart["state"];
   class?: string;
-};
+}
 
 function getStatusBadge(status: ToolUIPart["state"]) {
   const labels: Record<string, string> = {

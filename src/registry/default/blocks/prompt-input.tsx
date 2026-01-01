@@ -1,18 +1,3 @@
-import {
-  createContext,
-  useContext,
-  createSignal,
-  createEffect,
-  onCleanup,
-  splitProps,
-  Show,
-  For,
-  children as resolveChildren,
-  type JSX,
-  type ParentProps,
-  type Accessor,
-} from "solid-js";
-import { isServer } from "solid-js/web";
 import { Button } from "@repo/solid-ui/components/ui/button";
 import {
   Command,
@@ -47,7 +32,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@repo/solid-ui/components/ui/select";
-import { cn } from "@/lib/utils";
 import type { ChatStatus, FileUIPart } from "ai";
 import {
   CornerDownLeft,
@@ -60,34 +44,50 @@ import {
   X,
 } from "lucide-solid";
 import { nanoid } from "nanoid";
+import {
+  type Accessor,
+  createContext,
+  createEffect,
+  createSignal,
+  For,
+  type JSX,
+  onCleanup,
+  type ParentProps,
+  children as resolveChildren,
+  Show,
+  splitProps,
+  useContext,
+} from "solid-js";
+import { isServer } from "solid-js/web";
+import { cn } from "@/lib/utils";
 
 // ============================================================================
 // Provider Context & Types
 // ============================================================================
 
-export type AttachmentsContext = {
+export interface AttachmentsContext {
   files: Accessor<(FileUIPart & { id: string })[]>;
   add: (files: File[] | FileList) => void;
   remove: (id: string) => void;
   clear: () => void;
   openFileDialog: () => void;
   fileInputRef: { current: HTMLInputElement | null };
-};
+}
 
-export type TextInputContext = {
+export interface TextInputContext {
   value: Accessor<string>;
   setInput: (v: string) => void;
   clear: () => void;
-};
+}
 
-export type PromptInputControllerProps = {
+export interface PromptInputControllerProps {
   textInput: TextInputContext;
   attachments: AttachmentsContext;
   __registerFileInput: (
     ref: { current: HTMLInputElement | null },
     open: () => void
   ) => void;
-};
+}
 
 const PromptInputController = createContext<PromptInputControllerProps | null>(
   null
@@ -100,18 +100,18 @@ const ProviderAttachmentsContext = createContext<AttachmentsContext | null>(
 const serverDummyController: PromptInputControllerProps = {
   textInput: {
     value: () => "",
-    setInput: () => {},
-    clear: () => {},
+    setInput: () => undefined,
+    clear: () => undefined,
   },
   attachments: {
     files: () => [],
-    add: () => {},
-    remove: () => {},
-    clear: () => {},
-    openFileDialog: () => {},
+    add: () => undefined,
+    remove: () => undefined,
+    clear: () => undefined,
+    openFileDialog: () => undefined,
     fileInputRef: { current: null },
   },
-  __registerFileInput: () => {},
+  __registerFileInput: () => undefined,
 };
 
 export const usePromptInputController = () => {
@@ -158,11 +158,13 @@ export function PromptInputProvider(props: PromptInputProviderProps) {
     (FileUIPart & { id: string })[]
   >([]);
   const fileInputRef: { current: HTMLInputElement | null } = { current: null };
-  let openRef: () => void = () => {};
+  let openRef: () => void = () => undefined;
 
   const add = (files: File[] | FileList) => {
     const incoming = Array.from(files);
-    if (incoming.length === 0) return;
+    if (incoming.length === 0) {
+      return;
+    }
 
     setAttachmentFiles((prev) =>
       prev.concat(
@@ -180,7 +182,9 @@ export function PromptInputProvider(props: PromptInputProviderProps) {
   const remove = (id: string) => {
     setAttachmentFiles((prev) => {
       const found = prev.find((f) => f.id === id);
-      if (found?.url) URL.revokeObjectURL(found.url);
+      if (found?.url) {
+        URL.revokeObjectURL(found.url);
+      }
       return prev.filter((f) => f.id !== id);
     });
   };
@@ -188,7 +192,9 @@ export function PromptInputProvider(props: PromptInputProviderProps) {
   const clear = () => {
     setAttachmentFiles((prev) => {
       for (const f of prev) {
-        if (f.url) URL.revokeObjectURL(f.url);
+        if (f.url) {
+          URL.revokeObjectURL(f.url);
+        }
       }
       return [];
     });
@@ -196,7 +202,9 @@ export function PromptInputProvider(props: PromptInputProviderProps) {
 
   onCleanup(() => {
     for (const f of attachmentFiles()) {
-      if (f.url) URL.revokeObjectURL(f.url);
+      if (f.url) {
+        URL.revokeObjectURL(f.url);
+      }
     }
   });
 
@@ -247,10 +255,10 @@ const LocalAttachmentsContext = createContext<AttachmentsContext | null>(null);
 // SSR-safe dummy context for when components render on server without proper context
 const serverDummyContext: AttachmentsContext = {
   files: () => [],
-  add: () => {},
-  remove: () => {},
-  clear: () => {},
-  openFileDialog: () => {},
+  add: () => undefined,
+  remove: () => undefined,
+  clear: () => undefined,
+  openFileDialog: () => undefined,
   fileInputRef: { current: null },
 };
 
@@ -297,12 +305,12 @@ export function PromptInputAttachment(props: PromptInputAttachmentProps) {
           <div class="relative size-5 shrink-0">
             <div class="absolute inset-0 flex size-5 items-center justify-center overflow-hidden rounded bg-background transition-opacity group-hover:opacity-0">
               <Show
-                when={isImage()}
                 fallback={
                   <div class="flex size-5 items-center justify-center text-muted-foreground">
                     <Paperclip class="size-3" />
                   </div>
                 }
+                when={isImage()}
               >
                 <img
                   alt={filename() || "attachment"}
@@ -375,7 +383,7 @@ export function PromptInputAttachments(props: PromptInputAttachmentsProps) {
   return (
     <Show when={attachments.files().length > 0}>
       <div
-        class={cn("flex flex-wrap items-center gap-2 p-3 w-full", local.class)}
+        class={cn("flex w-full flex-wrap items-center gap-2 p-3", local.class)}
         {...others}
       >
         <For each={attachments.files()}>{(file) => local.children(file)}</For>
@@ -408,10 +416,10 @@ export function PromptInputActionAddAttachments(
   );
 }
 
-export type PromptInputMessage = {
+export interface PromptInputMessage {
   text: string;
   files: FileUIPart[];
-};
+}
 
 export type PromptInputProps = Omit<
   JSX.HTMLAttributes<HTMLFormElement>,
@@ -454,12 +462,15 @@ export function PromptInput(props: PromptInputProps) {
   const [formRef, setFormRef] = createSignal<HTMLFormElement | null>(null);
 
   const [items, setItems] = createSignal<(FileUIPart & { id: string })[]>([]);
-  const files = () => (usingProvider ? controller!.attachments.files() : items());
+  const files = () =>
+    usingProvider ? controller?.attachments.files() : items();
 
   const openFileDialogLocal = () => inputRef()?.click();
 
   const matchesAccept = (f: File) => {
-    if (!local.accept || local.accept.trim() === "") return true;
+    if (!local.accept || local.accept.trim() === "") {
+      return true;
+    }
     const patterns = local.accept
       .split(",")
       .map((s) => s.trim())
@@ -524,32 +535,35 @@ export function PromptInput(props: PromptInputProps) {
   const removeLocal = (id: string) =>
     setItems((prev) => {
       const found = prev.find((file) => file.id === id);
-      if (found?.url) URL.revokeObjectURL(found.url);
+      if (found?.url) {
+        URL.revokeObjectURL(found.url);
+      }
       return prev.filter((file) => file.id !== id);
     });
 
   const clearLocal = () =>
     setItems((prev) => {
       for (const file of prev) {
-        if (file.url) URL.revokeObjectURL(file.url);
+        if (file.url) {
+          URL.revokeObjectURL(file.url);
+        }
       }
       return [];
     });
 
-  const add = usingProvider ? controller!.attachments.add : addLocal;
-  const remove = usingProvider ? controller!.attachments.remove : removeLocal;
-  const clear = usingProvider ? controller!.attachments.clear : clearLocal;
+  const add = usingProvider ? controller?.attachments.add : addLocal;
+  const remove = usingProvider ? controller?.attachments.remove : removeLocal;
+  const clear = usingProvider ? controller?.attachments.clear : clearLocal;
   const openFileDialog = usingProvider
-    ? controller!.attachments.openFileDialog
+    ? controller?.attachments.openFileDialog
     : openFileDialogLocal;
 
   createEffect(() => {
-    if (!usingProvider) return;
+    if (!usingProvider) {
+      return;
+    }
     const input = inputRef();
-    controller!.__registerFileInput(
-      { current: input },
-      () => input?.click()
-    );
+    controller?.__registerFileInput({ current: input }, () => input?.click());
   });
 
   createEffect(() => {
@@ -562,13 +576,19 @@ export function PromptInput(props: PromptInputProps) {
   // Form drop handlers
   createEffect(() => {
     const form = formRef();
-    if (!form || local.globalDrop) return;
+    if (!form || local.globalDrop) {
+      return;
+    }
 
     const onDragOver = (e: DragEvent) => {
-      if (e.dataTransfer?.types?.includes("Files")) e.preventDefault();
+      if (e.dataTransfer?.types?.includes("Files")) {
+        e.preventDefault();
+      }
     };
     const onDrop = (e: DragEvent) => {
-      if (e.dataTransfer?.types?.includes("Files")) e.preventDefault();
+      if (e.dataTransfer?.types?.includes("Files")) {
+        e.preventDefault();
+      }
       if (e.dataTransfer?.files && e.dataTransfer.files.length > 0) {
         add(e.dataTransfer.files);
       }
@@ -583,13 +603,19 @@ export function PromptInput(props: PromptInputProps) {
 
   // Global drop handlers
   createEffect(() => {
-    if (!local.globalDrop) return;
+    if (!local.globalDrop) {
+      return;
+    }
 
     const onDragOver = (e: DragEvent) => {
-      if (e.dataTransfer?.types?.includes("Files")) e.preventDefault();
+      if (e.dataTransfer?.types?.includes("Files")) {
+        e.preventDefault();
+      }
     };
     const onDrop = (e: DragEvent) => {
-      if (e.dataTransfer?.types?.includes("Files")) e.preventDefault();
+      if (e.dataTransfer?.types?.includes("Files")) {
+        e.preventDefault();
+      }
       if (e.dataTransfer?.files && e.dataTransfer.files.length > 0) {
         add(e.dataTransfer.files);
       }
@@ -605,7 +631,9 @@ export function PromptInput(props: PromptInputProps) {
   onCleanup(() => {
     if (!usingProvider) {
       for (const f of items()) {
-        if (f.url) URL.revokeObjectURL(f.url);
+        if (f.url) {
+          URL.revokeObjectURL(f.url);
+        }
       }
     }
   });
@@ -642,7 +670,11 @@ export function PromptInput(props: PromptInputProps) {
     remove,
     clear,
     openFileDialog,
-    fileInputRef: { get current() { return inputRef(); } },
+    fileInputRef: {
+      get current() {
+        return inputRef();
+      },
+    },
   };
 
   const handleSubmit: JSX.EventHandler<HTMLFormElement, SubmitEvent> = (
@@ -652,7 +684,7 @@ export function PromptInput(props: PromptInputProps) {
 
     const form = event.currentTarget;
     const text = usingProvider
-      ? controller!.textInput.value()
+      ? controller?.textInput.value()
       : (() => {
           const formData = new FormData(form);
           return (formData.get("message") as string) || "";
@@ -664,7 +696,7 @@ export function PromptInput(props: PromptInputProps) {
 
     Promise.all(
       files().map(async ({ id, ...item }) => {
-        if (item.url && item.url.startsWith("blob:")) {
+        if (item.url?.startsWith("blob:")) {
           const dataUrl = await convertBlobUrlToDataUrl(item.url);
           return { ...item, url: dataUrl ?? item.url };
         }
@@ -679,18 +711,22 @@ export function PromptInput(props: PromptInputProps) {
             result
               .then(() => {
                 clear();
-                if (usingProvider) controller!.textInput.clear();
+                if (usingProvider) {
+                  controller?.textInput.clear();
+                }
               })
-              .catch(() => {});
+              .catch(() => undefined);
           } else {
             clear();
-            if (usingProvider) controller!.textInput.clear();
+            if (usingProvider) {
+              controller?.textInput.clear();
+            }
           }
         } catch {
           // Don't clear on error
         }
       })
-      .catch(() => {});
+      .catch(() => undefined);
   };
 
   const inner = (
@@ -749,15 +785,21 @@ export function PromptInputTextarea(props: PromptInputTextareaProps) {
     e
   ) => {
     if (e.key === "Enter") {
-      if (isComposing() || e.isComposing) return;
-      if (e.shiftKey) return;
+      if (isComposing() || e.isComposing) {
+        return;
+      }
+      if (e.shiftKey) {
+        return;
+      }
       e.preventDefault();
 
       const form = e.currentTarget.form;
       const submitButton = form?.querySelector(
         'button[type="submit"]'
       ) as HTMLButtonElement | null;
-      if (submitButton?.disabled) return;
+      if (submitButton?.disabled) {
+        return;
+      }
 
       form?.requestSubmit();
     }
@@ -769,7 +811,9 @@ export function PromptInputTextarea(props: PromptInputTextareaProps) {
     ) {
       e.preventDefault();
       const lastAttachment = attachments.files().at(-1);
-      if (lastAttachment) attachments.remove(lastAttachment.id);
+      if (lastAttachment) {
+        attachments.remove(lastAttachment.id);
+      }
     }
   };
 
@@ -777,13 +821,17 @@ export function PromptInputTextarea(props: PromptInputTextareaProps) {
     event
   ) => {
     const items = event.clipboardData?.items;
-    if (!items) return;
+    if (!items) {
+      return;
+    }
 
     const files: File[] = [];
     for (const item of items) {
       if (item.kind === "file") {
         const file = item.getAsFile();
-        if (file) files.push(file);
+        if (file) {
+          files.push(file);
+        }
       }
     }
 
@@ -810,11 +858,11 @@ export function PromptInputTextarea(props: PromptInputTextareaProps) {
       name="message"
       onCompositionEnd={() => setIsComposing(false)}
       onCompositionStart={() => setIsComposing(true)}
+      onInput={handleInput}
       onKeyDown={handleKeyDown}
       onPaste={handlePaste}
       placeholder={local.placeholder ?? "What would you like to know?"}
       value={controller ? controller.textInput.value() : local.value}
-      onInput={handleInput}
       {...others}
     />
   );
@@ -871,10 +919,12 @@ export function PromptInputButton(props: PromptInputButtonProps) {
   const resolved = resolveChildren(() => local.children);
   const childCount = () => {
     const c = resolved();
-    return Array.isArray(c) ? c.length : c ? 1 : 0;
+    if (Array.isArray(c)) {
+      return c.length;
+    }
+    return c ? 1 : 0;
   };
-  const newSize = () =>
-    local.size ?? (childCount() > 1 ? "sm" : "icon-sm");
+  const newSize = () => local.size ?? (childCount() > 1 ? "sm" : "icon-sm");
 
   return (
     <InputGroupButton
@@ -994,23 +1044,23 @@ interface SpeechRecognitionEvent extends Event {
   resultIndex: number;
 }
 
-type SpeechRecognitionResultList = {
+interface SpeechRecognitionResultList {
   readonly length: number;
   item(index: number): SpeechRecognitionResult;
   [index: number]: SpeechRecognitionResult;
-};
+}
 
-type SpeechRecognitionResult = {
+interface SpeechRecognitionResult {
   readonly length: number;
   item(index: number): SpeechRecognitionAlternative;
   [index: number]: SpeechRecognitionAlternative;
   isFinal: boolean;
-};
+}
 
-type SpeechRecognitionAlternative = {
+interface SpeechRecognitionAlternative {
   transcript: string;
   confidence: number;
-};
+}
 
 interface SpeechRecognitionErrorEvent extends Event {
   error: string;
@@ -1090,7 +1140,9 @@ export function PromptInputSpeechButton(props: PromptInputSpeechButtonProps) {
 
   const toggleListening = () => {
     const rec = recognition();
-    if (!rec) return;
+    if (!rec) {
+      return;
+    }
     if (isListening()) {
       rec.stop();
     } else {
@@ -1136,9 +1188,7 @@ export function PromptInputSelectTrigger(props: PromptInputSelectTriggerProps) {
   );
 }
 
-export type PromptInputSelectContentProps = Parameters<
-  typeof SelectContent
->[0];
+export type PromptInputSelectContentProps = Parameters<typeof SelectContent>[0];
 
 export function PromptInputSelectContent(props: PromptInputSelectContentProps) {
   const [local, others] = splitProps(props, ["class"]);
@@ -1165,8 +1215,8 @@ export function PromptInputHoverCard(props: PromptInputHoverCardProps) {
   const [local, others] = splitProps(props, ["openDelay", "closeDelay"]);
   return (
     <HoverCard
-      openDelay={local.openDelay ?? 0}
       closeDelay={local.closeDelay ?? 0}
+      openDelay={local.openDelay ?? 0}
       {...others}
     />
   );

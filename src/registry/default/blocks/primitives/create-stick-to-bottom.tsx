@@ -1,22 +1,21 @@
 import {
-  createSignal,
-  createContext,
-  useContext,
-  onMount,
-  onCleanup,
-  createEffect,
-  type JSX,
-  type ParentProps,
   type Accessor,
+  createContext,
+  createSignal,
+  type JSX,
+  onCleanup,
+  onMount,
+  type ParentProps,
   splitProps,
+  useContext,
 } from "solid-js";
 
 export type ScrollBehavior = "smooth" | "instant" | "auto";
 
-export type StickToBottomContextValue = {
+export interface StickToBottomContextValue {
   isAtBottom: Accessor<boolean>;
   scrollToBottom: () => Promise<boolean>;
-};
+}
 
 const StickToBottomContext = createContext<StickToBottomContextValue>();
 
@@ -30,28 +29,32 @@ export function useStickToBottomContext() {
   return context;
 }
 
-export type UseStickToBottomOptions = {
+export interface UseStickToBottomOptions {
   initial?: ScrollBehavior;
   resize?: ScrollBehavior;
-};
+}
 
 export function createStickToBottom(options: UseStickToBottomOptions = {}) {
   const { initial = "instant", resize = "smooth" } = options;
 
   let scrollRef: HTMLElement | undefined;
-  let contentRef: HTMLElement | undefined;
+  let _contentRef: HTMLElement | undefined;
 
   const [isAtBottom, setIsAtBottom] = createSignal(true);
   const [isSticky, setIsSticky] = createSignal(true);
 
   const checkIfAtBottom = () => {
-    if (!scrollRef) return true;
+    if (!scrollRef) {
+      return true;
+    }
     const { scrollTop, scrollHeight, clientHeight } = scrollRef;
     const threshold = 10;
     return scrollHeight - scrollTop - clientHeight <= threshold;
   };
 
-  const scrollToBottom = (behavior: ScrollBehavior = "smooth"): Promise<boolean> => {
+  const scrollToBottom = (
+    behavior: ScrollBehavior = "smooth"
+  ): Promise<boolean> => {
     return new Promise((resolve) => {
       if (!scrollRef) {
         resolve(false);
@@ -87,10 +90,10 @@ export function createStickToBottom(options: UseStickToBottomOptions = {}) {
     setIsAtBottom(atBottom);
 
     // If user scrolled up manually, disable stickiness
-    if (!atBottom) {
-      setIsSticky(false);
-    } else {
+    if (atBottom) {
       setIsSticky(true);
+    } else {
+      setIsSticky(false);
     }
   };
 
@@ -112,7 +115,7 @@ export function createStickToBottom(options: UseStickToBottomOptions = {}) {
   };
 
   const setupContentRef = (el: HTMLElement) => {
-    contentRef = el;
+    _contentRef = el;
 
     // Observe content size changes
     const resizeObserver = new ResizeObserver(() => {
@@ -147,12 +150,16 @@ export function StickToBottom(props: StickToBottomProps) {
     ["initial", "resize"]
   );
 
-  const { scrollRef, contentRef, isAtBottom, scrollToBottom } =
-    createStickToBottom(options);
+  const {
+    scrollRef,
+    contentRef: _contentRef,
+    isAtBottom,
+    scrollToBottom,
+  } = createStickToBottom(options);
 
   return (
     <StickToBottomContext.Provider value={{ isAtBottom, scrollToBottom }}>
-      <div ref={scrollRef} class={local.class} {...others}>
+      <div class={local.class} ref={scrollRef} {...others}>
         {local.children}
       </div>
     </StickToBottomContext.Provider>
@@ -165,9 +172,13 @@ export type StickToBottomContentProps = ParentProps<
 
 function StickToBottomContent(props: StickToBottomContentProps) {
   const [local, others] = splitProps(props, ["children", "class"]);
-  const context = useStickToBottomContext();
+  const _context = useStickToBottomContext();
 
   let contentEl: HTMLDivElement | undefined;
+
+  const setContentRef = (el: HTMLDivElement) => {
+    contentEl = el;
+  };
 
   onMount(() => {
     if (contentEl) {
@@ -181,7 +192,7 @@ function StickToBottomContent(props: StickToBottomContentProps) {
   });
 
   return (
-    <div ref={contentEl} class={local.class} {...others}>
+    <div class={local.class} ref={setContentRef} {...others}>
       {local.children}
     </div>
   );

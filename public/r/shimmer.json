@@ -4,9 +4,7 @@
   "type": "registry:ui",
   "title": "Shimmer",
   "description": "A shimmer effect for text",
-  "dependencies": [
-    "solid-motionone"
-  ],
+  "dependencies": ["solid-motionone"],
   "files": [
     {
       "path": "components/ui/shimmer.tsx",

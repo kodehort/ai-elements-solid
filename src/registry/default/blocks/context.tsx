@@ -1,11 +1,3 @@
-import {
-  createContext,
-  useContext,
-  splitProps,
-  Show,
-  type JSX,
-  type ParentProps,
-} from "solid-js";
 import { Button } from "@repo/solid-ui/components/ui/button";
 import {
   HoverCard,
@@ -13,8 +5,16 @@ import {
   HoverCardTrigger,
 } from "@repo/solid-ui/components/ui/hover-card";
 import { Progress } from "@repo/solid-ui/components/ui/progress";
-import { cn } from "@/lib/utils";
 import type { LanguageModelUsage } from "ai";
+import {
+  createContext,
+  type JSX,
+  type ParentProps,
+  Show,
+  splitProps,
+  useContext,
+} from "solid-js";
+import { cn } from "@/lib/utils";
 
 const PERCENT_MAX = 100;
 const ICON_RADIUS = 10;
@@ -24,12 +24,12 @@ const ICON_STROKE_WIDTH = 2;
 
 type ModelId = string;
 
-type ContextSchema = {
+interface ContextSchema {
   usedTokens: number;
   maxTokens: number;
   usage?: LanguageModelUsage;
   modelId?: ModelId;
-};
+}
 
 const ContextContext = createContext<ContextSchema | null>(null);
 
@@ -41,7 +41,8 @@ function useContextValue() {
   return context;
 }
 
-export type ContextProps = ParentProps<Parameters<typeof HoverCard>[0]> & ContextSchema;
+export type ContextProps = ParentProps<Parameters<typeof HoverCard>[0]> &
+  ContextSchema;
 
 export function Context(props: ContextProps) {
   const [local, others] = splitProps(props, [
@@ -123,10 +124,7 @@ export function ContextTrigger(props: ContextTriggerProps) {
 
   return (
     <HoverCardTrigger as="span">
-      <Show
-        when={!local.children}
-        fallback={local.children}
-      >
+      <Show fallback={local.children} when={!local.children}>
         <Button type="button" variant="ghost" {...others}>
           <span class="font-medium text-muted-foreground">
             {renderedPercent()}
@@ -151,7 +149,9 @@ export function ContextContent(props: ContextContentProps) {
   );
 }
 
-export type ContextContentHeaderProps = ParentProps<JSX.HTMLAttributes<HTMLDivElement>>;
+export type ContextContentHeaderProps = ParentProps<
+  JSX.HTMLAttributes<HTMLDivElement>
+>;
 
 export function ContextContentHeader(props: ContextContentHeaderProps) {
   const [local, others] = splitProps(props, ["children", "class"]);
@@ -163,13 +163,17 @@ export function ContextContentHeader(props: ContextContentHeaderProps) {
       maximumFractionDigits: 1,
     }).format(usedPercent());
   const used = () =>
-    new Intl.NumberFormat("en-US", { notation: "compact" }).format(ctx.usedTokens);
+    new Intl.NumberFormat("en-US", { notation: "compact" }).format(
+      ctx.usedTokens
+    );
   const total = () =>
-    new Intl.NumberFormat("en-US", { notation: "compact" }).format(ctx.maxTokens);
+    new Intl.NumberFormat("en-US", { notation: "compact" }).format(
+      ctx.maxTokens
+    );
 
   return (
     <div class={cn("w-full space-y-2 p-3", local.class)} {...others}>
-      <Show when={!local.children} fallback={local.children}>
+      <Show fallback={local.children} when={!local.children}>
         <div class="flex items-center justify-between gap-3 text-xs">
           <p>{displayPct()}</p>
           <p class="font-mono text-muted-foreground">
@@ -184,7 +188,9 @@ export function ContextContentHeader(props: ContextContentHeaderProps) {
   );
 }
 
-export type ContextContentBodyProps = ParentProps<JSX.HTMLAttributes<HTMLDivElement>>;
+export type ContextContentBodyProps = ParentProps<
+  JSX.HTMLAttributes<HTMLDivElement>
+>;
 
 export function ContextContentBody(props: ContextContentBodyProps) {
   const [local, others] = splitProps(props, ["children", "class"]);
@@ -196,11 +202,13 @@ export function ContextContentBody(props: ContextContentBodyProps) {
   );
 }
 
-export type ContextContentFooterProps = ParentProps<JSX.HTMLAttributes<HTMLDivElement>>;
+export type ContextContentFooterProps = ParentProps<
+  JSX.HTMLAttributes<HTMLDivElement>
+>;
 
 export function ContextContentFooter(props: ContextContentFooterProps) {
   const [local, others] = splitProps(props, ["children", "class"]);
-  const ctx = useContextValue();
+  const _ctx = useContextValue();
 
   // Note: tokenlens is React-only, so we skip cost calculation
   // Users can provide their own cost calculation via children
@@ -218,7 +226,7 @@ export function ContextContentFooter(props: ContextContentFooterProps) {
       )}
       {...others}
     >
-      <Show when={!local.children} fallback={local.children}>
+      <Show fallback={local.children} when={!local.children}>
         <span class="text-muted-foreground">Total cost</span>
         <span>{totalCost()}</span>
       </Show>
@@ -226,7 +234,9 @@ export function ContextContentFooter(props: ContextContentFooterProps) {
   );
 }
 
-export type ContextInputUsageProps = ParentProps<JSX.HTMLAttributes<HTMLDivElement>>;
+export type ContextInputUsageProps = ParentProps<
+  JSX.HTMLAttributes<HTMLDivElement>
+>;
 
 export function ContextInputUsage(props: ContextInputUsageProps) {
   const [local, others] = splitProps(props, ["class", "children"]);
@@ -235,22 +245,27 @@ export function ContextInputUsage(props: ContextInputUsageProps) {
 
   return (
     <Show when={local.children || inputTokens() > 0}>
-      <Show when={local.children} fallback={
-        <div
-          class={cn("flex items-center justify-between text-xs", local.class)}
-          {...others}
-        >
-          <span class="text-muted-foreground">Input</span>
-          <TokensWithCost tokens={inputTokens()} />
-        </div>
-      }>
+      <Show
+        fallback={
+          <div
+            class={cn("flex items-center justify-between text-xs", local.class)}
+            {...others}
+          >
+            <span class="text-muted-foreground">Input</span>
+            <TokensWithCost tokens={inputTokens()} />
+          </div>
+        }
+        when={local.children}
+      >
         {local.children}
       </Show>
     </Show>
   );
 }
 
-export type ContextOutputUsageProps = ParentProps<JSX.HTMLAttributes<HTMLDivElement>>;
+export type ContextOutputUsageProps = ParentProps<
+  JSX.HTMLAttributes<HTMLDivElement>
+>;
 
 export function ContextOutputUsage(props: ContextOutputUsageProps) {
   const [local, others] = splitProps(props, ["class", "children"]);
@@ -259,22 +274,27 @@ export function ContextOutputUsage(props: ContextOutputUsageProps) {
 
   return (
     <Show when={local.children || outputTokens() > 0}>
-      <Show when={local.children} fallback={
-        <div
-          class={cn("flex items-center justify-between text-xs", local.class)}
-          {...others}
-        >
-          <span class="text-muted-foreground">Output</span>
-          <TokensWithCost tokens={outputTokens()} />
-        </div>
-      }>
+      <Show
+        fallback={
+          <div
+            class={cn("flex items-center justify-between text-xs", local.class)}
+            {...others}
+          >
+            <span class="text-muted-foreground">Output</span>
+            <TokensWithCost tokens={outputTokens()} />
+          </div>
+        }
+        when={local.children}
+      >
         {local.children}
       </Show>
     </Show>
   );
 }
 
-export type ContextReasoningUsageProps = ParentProps<JSX.HTMLAttributes<HTMLDivElement>>;
+export type ContextReasoningUsageProps = ParentProps<
+  JSX.HTMLAttributes<HTMLDivElement>
+>;
 
 export function ContextReasoningUsage(props: ContextReasoningUsageProps) {
   const [local, others] = splitProps(props, ["class", "children"]);
@@ -283,22 +303,27 @@ export function ContextReasoningUsage(props: ContextReasoningUsageProps) {
 
   return (
     <Show when={local.children || reasoningTokens() > 0}>
-      <Show when={local.children} fallback={
-        <div
-          class={cn("flex items-center justify-between text-xs", local.class)}
-          {...others}
-        >
-          <span class="text-muted-foreground">Reasoning</span>
-          <TokensWithCost tokens={reasoningTokens()} />
-        </div>
-      }>
+      <Show
+        fallback={
+          <div
+            class={cn("flex items-center justify-between text-xs", local.class)}
+            {...others}
+          >
+            <span class="text-muted-foreground">Reasoning</span>
+            <TokensWithCost tokens={reasoningTokens()} />
+          </div>
+        }
+        when={local.children}
+      >
         {local.children}
       </Show>
     </Show>
   );
 }
 
-export type ContextCacheUsageProps = ParentProps<JSX.HTMLAttributes<HTMLDivElement>>;
+export type ContextCacheUsageProps = ParentProps<
+  JSX.HTMLAttributes<HTMLDivElement>
+>;
 
 export function ContextCacheUsage(props: ContextCacheUsageProps) {
   const [local, others] = splitProps(props, ["class", "children"]);
@@ -307,15 +332,18 @@ export function ContextCacheUsage(props: ContextCacheUsageProps) {
 
   return (
     <Show when={local.children || cacheTokens() > 0}>
-      <Show when={local.children} fallback={
-        <div
-          class={cn("flex items-center justify-between text-xs", local.class)}
-          {...others}
-        >
-          <span class="text-muted-foreground">Cache</span>
-          <TokensWithCost tokens={cacheTokens()} />
-        </div>
-      }>
+      <Show
+        fallback={
+          <div
+            class={cn("flex items-center justify-between text-xs", local.class)}
+            {...others}
+          >
+            <span class="text-muted-foreground">Cache</span>
+            <TokensWithCost tokens={cacheTokens()} />
+          </div>
+        }
+        when={local.children}
+      >
         {local.children}
       </Show>
     </Show>
@@ -326,7 +354,9 @@ function TokensWithCost(props: { tokens?: number; costText?: string }) {
   const formattedTokens = () =>
     props.tokens === undefined
       ? "—"
-      : new Intl.NumberFormat("en-US", { notation: "compact" }).format(props.tokens);
+      : new Intl.NumberFormat("en-US", { notation: "compact" }).format(
+          props.tokens
+        );
 
   return (
     <span>

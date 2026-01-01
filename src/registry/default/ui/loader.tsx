@@ -1,9 +1,9 @@
 import { type JSX, splitProps } from "solid-js";
 import { cn } from "@/lib/utils";
 
-type LoaderIconProps = {
+interface LoaderIconProps {
   size?: number;
-};
+}
 
 const LoaderIcon = (props: LoaderIconProps) => {
   const size = () => props.size ?? 16;

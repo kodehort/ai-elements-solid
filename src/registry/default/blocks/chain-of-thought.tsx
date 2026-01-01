@@ -1,26 +1,26 @@
-import {
-  createContext,
-  useContext,
-  splitProps,
-  Show,
-  type JSX,
-  type ParentProps,
-  type Accessor,
-} from "solid-js";
 import { Badge } from "@repo/solid-ui/components/ui/badge";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@repo/solid-ui/components/ui/collapsible";
-import { cn } from "@/lib/utils";
 import { Brain, ChevronDown, Dot, type LucideIcon } from "lucide-solid";
+import {
+  type Accessor,
+  createContext,
+  type JSX,
+  type ParentProps,
+  Show,
+  splitProps,
+  useContext,
+} from "solid-js";
+import { cn } from "@/lib/utils";
 import { createControllableState } from "./primitives/create-controllable-state";
 
-type ChainOfThoughtContextValue = {
+interface ChainOfThoughtContextValue {
   isOpen: Accessor<boolean | undefined>;
   setIsOpen: (open: boolean) => void;
-};
+}
 
 const ChainOfThoughtContext = createContext<ChainOfThoughtContextValue | null>(
   null
@@ -36,7 +36,9 @@ function useChainOfThought() {
   return context;
 }
 
-export type ChainOfThoughtProps = ParentProps<JSX.HTMLAttributes<HTMLDivElement>> & {
+export type ChainOfThoughtProps = ParentProps<
+  JSX.HTMLAttributes<HTMLDivElement>
+> & {
   open?: boolean;
   defaultOpen?: boolean;
   onOpenChange?: (open: boolean) => void;
@@ -101,7 +103,9 @@ export function ChainOfThoughtHeader(props: ChainOfThoughtHeaderProps) {
   );
 }
 
-export type ChainOfThoughtStepProps = ParentProps<JSX.HTMLAttributes<HTMLDivElement>> & {
+export type ChainOfThoughtStepProps = ParentProps<
+  JSX.HTMLAttributes<HTMLDivElement>
+> & {
   icon?: LucideIcon;
   label: JSX.Element;
   description?: JSX.Element;
@@ -139,7 +143,7 @@ export function ChainOfThoughtStep(props: ChainOfThoughtStepProps) {
     >
       <div class="relative mt-0.5">
         <Icon class="size-4" />
-        <div class="-mx-px absolute top-7 bottom-0 left-1/2 w-px bg-border" />
+        <div class="absolute top-7 bottom-0 left-1/2 -mx-px w-px bg-border" />
       </div>
       <div class="flex-1 space-y-2 overflow-hidden">
         <div>{local.label}</div>
@@ -152,13 +156,19 @@ export function ChainOfThoughtStep(props: ChainOfThoughtStepProps) {
   );
 }
 
-export type ChainOfThoughtSearchResultsProps = JSX.HTMLAttributes<HTMLDivElement>;
+export type ChainOfThoughtSearchResultsProps =
+  JSX.HTMLAttributes<HTMLDivElement>;
 
-export function ChainOfThoughtSearchResults(props: ChainOfThoughtSearchResultsProps) {
+export function ChainOfThoughtSearchResults(
+  props: ChainOfThoughtSearchResultsProps
+) {
   const [local, others] = splitProps(props, ["class", "children"]);
 
   return (
-    <div class={cn("flex flex-wrap items-center gap-2", local.class)} {...others}>
+    <div
+      class={cn("flex flex-wrap items-center gap-2", local.class)}
+      {...others}
+    >
       {local.children}
     </div>
   );
@@ -166,7 +176,9 @@ export function ChainOfThoughtSearchResults(props: ChainOfThoughtSearchResultsPr
 
 export type ChainOfThoughtSearchResultProps = Parameters<typeof Badge>[0];
 
-export function ChainOfThoughtSearchResult(props: ChainOfThoughtSearchResultProps) {
+export function ChainOfThoughtSearchResult(
+  props: ChainOfThoughtSearchResultProps
+) {
   const [local, others] = splitProps(props, ["class", "children"]);
 
   return (
@@ -204,7 +216,9 @@ export function ChainOfThoughtContent(props: ChainOfThoughtContentProps) {
   );
 }
 
-export type ChainOfThoughtImageProps = ParentProps<JSX.HTMLAttributes<HTMLDivElement>> & {
+export type ChainOfThoughtImageProps = ParentProps<
+  JSX.HTMLAttributes<HTMLDivElement>
+> & {
   caption?: string;
 };
 
