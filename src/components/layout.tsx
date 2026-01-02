@@ -132,7 +132,7 @@ export function DocsLayout(props: ParentProps) {
       <div>
         <SidebarTrigger />
         <Navbar />
-        <main>{props.children}</main>
+        <main  class="p-6 prose">{props.children}</main>
       </div>
     </SidebarProvider>
   );
@@ -142,7 +142,7 @@ export function PageLayout(props: ParentProps) {
   return (
     <div class="min-h-screen">
       <Navbar />
-      <main>{props.children}</main>
+      <main class="p-6">{props.children}</main>
     </div>
   );
 }

@@ -1,0 +1,303 @@
+{
+  "components": {
+    "chatbot": [
+      {
+        "title": "Chain of Thought",
+        "href": "/docs/components/chain-of-thought",
+        "category": "chatbot",
+        "order": 999
+      },
+      {
+        "title": "Checkpoint",
+        "href": "/docs/components/checkpoint",
+        "category": "chatbot",
+        "order": 999
+      },
+      {
+        "title": "Confirmation",
+        "href": "/docs/components/confirmation",
+        "category": "chatbot",
+        "order": 999
+      },
+      {
+        "title": "Context",
+        "href": "/docs/components/context",
+        "category": "chatbot",
+        "order": 999
+      },
+      {
+        "title": "Conversation",
+        "href": "/docs/components/conversation",
+        "category": "chatbot",
+        "order": 999
+      },
+      {
+        "title": "Inline Citation",
+        "href": "/docs/components/inline-citation",
+        "category": "chatbot",
+        "order": 999
+      },
+      {
+        "title": "Message",
+        "href": "/docs/components/message",
+        "category": "chatbot",
+        "order": 999
+      },
+      {
+        "title": "Model Selector",
+        "href": "/docs/components/model-selector",
+        "category": "chatbot",
+        "order": 999
+      },
+      {
+        "title": "Plan",
+        "href": "/docs/components/plan",
+        "category": "chatbot",
+        "order": 999
+      },
+      {
+        "title": "Prompt Input",
+        "href": "/docs/components/prompt-input",
+        "category": "chatbot",
+        "order": 999
+      },
+      {
+        "title": "Queue",
+        "href": "/docs/components/queue",
+        "category": "chatbot",
+        "order": 999
+      },
+      {
+        "title": "Reasoning",
+        "href": "/docs/components/reasoning",
+        "category": "chatbot",
+        "order": 999
+      },
+      {
+        "title": "Shimmer",
+        "href": "/docs/components/shimmer",
+        "category": "chatbot",
+        "order": 999
+      },
+      {
+        "title": "Sources",
+        "href": "/docs/components/sources",
+        "category": "chatbot",
+        "order": 999
+      },
+      {
+        "title": "Suggestion",
+        "href": "/docs/components/suggestion",
+        "category": "chatbot",
+        "order": 999
+      },
+      {
+        "title": "Task",
+        "href": "/docs/components/task",
+        "category": "chatbot",
+        "order": 999
+      },
+      {
+        "title": "Tool",
+        "href": "/docs/components/tool",
+        "category": "chatbot",
+        "order": 999
+      }
+    ],
+    "vibe": [
+      {
+        "title": "Artifact",
+        "href": "/docs/components/artifact",
+        "category": "vibe",
+        "order": 999
+      },
+      {
+        "title": "Web Preview",
+        "href": "/docs/components/web-preview",
+        "category": "vibe",
+        "order": 999
+      }
+    ],
+    "utility": [
+      {
+        "title": "Code Block",
+        "href": "/docs/components/code-block",
+        "category": "utility",
+        "order": 999
+      },
+      {
+        "title": "Image",
+        "href": "/docs/components/image",
+        "category": "utility",
+        "order": 999
+      },
+      {
+        "title": "Loader",
+        "href": "/docs/components/loader",
+        "category": "utility",
+        "order": 999
+      }
+    ],
+    "docs": [
+      {
+        "title": "Open In Chat",
+        "href": "/docs/components/open-in-chat",
+        "category": "docs",
+        "order": 999
+      }
+    ],
+    "all": [
+      {
+        "title": "Artifact",
+        "href": "/docs/components/artifact",
+        "category": "vibe",
+        "order": 999
+      },
+      {
+        "title": "Chain of Thought",
+        "href": "/docs/components/chain-of-thought",
+        "category": "chatbot",
+        "order": 999
+      },
+      {
+        "title": "Checkpoint",
+        "href": "/docs/components/checkpoint",
+        "category": "chatbot",
+        "order": 999
+      },
+      {
+        "title": "Code Block",
+        "href": "/docs/components/code-block",
+        "category": "utility",
+        "order": 999
+      },
+      {
+        "title": "Confirmation",
+        "href": "/docs/components/confirmation",
+        "category": "chatbot",
+        "order": 999
+      },
+      {
+        "title": "Context",
+        "href": "/docs/components/context",
+        "category": "chatbot",
+        "order": 999
+      },
+      {
+        "title": "Conversation",
+        "href": "/docs/components/conversation",
+        "category": "chatbot",
+        "order": 999
+      },
+      {
+        "title": "Image",
+        "href": "/docs/components/image",
+        "category": "utility",
+        "order": 999
+      },
+      {
+        "title": "Inline Citation",
+        "href": "/docs/components/inline-citation",
+        "category": "chatbot",
+        "order": 999
+      },
+      {
+        "title": "Loader",
+        "href": "/docs/components/loader",
+        "category": "utility",
+        "order": 999
+      },
+      {
+        "title": "Message",
+        "href": "/docs/components/message",
+        "category": "chatbot",
+        "order": 999
+      },
+      {
+        "title": "Model Selector",
+        "href": "/docs/components/model-selector",
+        "category": "chatbot",
+        "order": 999
+      },
+      {
+        "title": "Open In Chat",
+        "href": "/docs/components/open-in-chat",
+        "category": "docs",
+        "order": 999
+      },
+      {
+        "title": "Plan",
+        "href": "/docs/components/plan",
+        "category": "chatbot",
+        "order": 999
+      },
+      {
+        "title": "Prompt Input",
+        "href": "/docs/components/prompt-input",
+        "category": "chatbot",
+        "order": 999
+      },
+      {
+        "title": "Queue",
+        "href": "/docs/components/queue",
+        "category": "chatbot",
+        "order": 999
+      },
+      {
+        "title": "Reasoning",
+        "href": "/docs/components/reasoning",
+        "category": "chatbot",
+        "order": 999
+      },
+      {
+        "title": "Shimmer",
+        "href": "/docs/components/shimmer",
+        "category": "chatbot",
+        "order": 999
+      },
+      {
+        "title": "Sources",
+        "href": "/docs/components/sources",
+        "category": "chatbot",
+        "order": 999
+      },
+      {
+        "title": "Suggestion",
+        "href": "/docs/components/suggestion",
+        "category": "chatbot",
+        "order": 999
+      },
+      {
+        "title": "Task",
+        "href": "/docs/components/task",
+        "category": "chatbot",
+        "order": 999
+      },
+      {
+        "title": "Tool",
+        "href": "/docs/components/tool",
+        "category": "chatbot",
+        "order": 999
+      },
+      {
+        "title": "Web Preview",
+        "href": "/docs/components/web-preview",
+        "category": "vibe",
+        "order": 999
+      }
+    ]
+  },
+  "examples": [
+    {
+      "title": "Chatbot",
+      "href": "/docs/examples/chatbot",
+      "order": 999
+    },
+    {
+      "title": "v0 clone",
+      "href": "/docs/examples/v0",
+      "order": 999
+    }
+  ],
+  "generated": "2026-01-02T01:12:37.578Z"
+}

@@ -18,5 +18,5 @@
     "baseUrl": ".",
     "strictNullChecks": true
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx", "scripts/**/*.mjs"]
+  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.mdx", "scripts/**/*.mjs"]
 }

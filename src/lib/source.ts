@@ -1,10 +1,4 @@
-import type { Component } from "solid-js";
-
-export interface PageMeta {
-  title: string;
-  description?: string;
-  path?: string;
-}
+import generatedNav from "./generated-nav.json";
 
 export interface NavItem {
   title: string;
@@ -12,13 +6,7 @@ export interface NavItem {
   items?: NavItem[];
 }
 
-export interface DocPage {
-  slug: string;
-  meta: PageMeta;
-  Content: Component;
-}
-
-// Navigation structure with all components
+// Build navigation from generated JSON
 export const navigation: NavItem[] = [
   { title: "Introduction", href: "/docs" },
   { title: "Usage", href: "/docs/usage" },
@@ -26,57 +14,40 @@ export const navigation: NavItem[] = [
   { title: "MCP", href: "/docs/mcp" },
   {
     title: "Examples",
-    href: "/examples",
-    items: [
-      { title: "ChatGPT Clone", href: "/docs/components/demo-chatgpt" },
-      { title: "Claude Clone", href: "/docs/components/demo-claude" },
-      { title: "v0 Clone", href: "/docs/components/v0-clone" },
-    ],
+    href: "/docs/examples",
+    items: generatedNav.examples.map((e) => ({ title: e.title, href: e.href })),
   },
   {
     title: "Chatbot Components",
     href: "/docs/components/conversation",
-    items: [
-      { title: "Chain of Thought", href: "/docs/components/chain-of-thought" },
-      { title: "Checkpoint", href: "/docs/components/checkpoint" },
-      { title: "Confirmation", href: "/docs/components/confirmation" },
-      { title: "Context", href: "/docs/components/context" },
-      { title: "Conversation", href: "/docs/components/conversation" },
-      { title: "Inline Citation", href: "/docs/components/inline-citation" },
-      { title: "Message", href: "/docs/components/message" },
-      { title: "Model Selector", href: "/docs/components/model-selector" },
-      { title: "Plan", href: "/docs/components/plan" },
-      { title: "Prompt Input", href: "/docs/components/prompt-input" },
-      { title: "Queue", href: "/docs/components/queue" },
-      { title: "Reasoning", href: "/docs/components/reasoning" },
-      { title: "Shimmer", href: "/docs/components/shimmer" },
-      { title: "Sources", href: "/docs/components/sources" },
-      { title: "Suggestion", href: "/docs/components/suggestion" },
-      { title: "Task", href: "/docs/components/task" },
-      { title: "Tool", href: "/docs/components/tool" },
-    ],
+    items: generatedNav.components.chatbot.map((c) => ({
+      title: c.title,
+      href: c.href,
+    })),
   },
   {
     title: "Vibe Coding",
     href: "/docs/components/artifact",
-    items: [
-      { title: "Artifact", href: "/docs/components/artifact" },
-      { title: "Web Preview", href: "/docs/components/web-preview" },
-    ],
+    items: generatedNav.components.vibe.map((c) => ({
+      title: c.title,
+      href: c.href,
+    })),
   },
   {
     title: "Utilities",
     href: "/docs/components/code-block",
-    items: [
-      { title: "Code Block", href: "/docs/components/code-block" },
-      { title: "Image", href: "/docs/components/image" },
-      { title: "Loader", href: "/docs/components/loader" },
-    ],
+    items: generatedNav.components.utility.map((c) => ({
+      title: c.title,
+      href: c.href,
+    })),
   },
   {
     title: "Documentation",
     href: "/docs/components/open-in-chat",
-    items: [{ title: "Open in Chat", href: "/docs/components/open-in-chat" }],
+    items: generatedNav.components.docs.map((c) => ({
+      title: c.title,
+      href: c.href,
+    })),
   },
 ];
 
