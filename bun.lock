@@ -14,7 +14,7 @@
         "clsx": "^2.1.1",
         "cmdk-solid": "^1.1.2",
         "gray-matter": "^4.0.3",
-        "lucide-solid": "^0.562.0",
+        "lucide-solid": "^0.577.0",
         "remark-frontmatter": "^5.0.0",
         "remark-gfm": "^4.0.1",
         "remark-mdx-frontmatter": "^5.2.0",
@@ -1114,7 +1114,7 @@
 
     "lru-cache": ["lru-cache@11.2.4", "", {}, "sha512-B5Y16Jr9LB9dHVkh6ZevG+vAbOsNOYCX+sXvFWFu7B3Iz5mijW3zdbMyhsh8ANd2mSWBYdJgnqi+mL7/LrOPYg=="],
 
-    "lucide-solid": ["lucide-solid@0.562.0", "", { "peerDependencies": { "solid-js": "^1.4.7" } }, "sha512-RzxujbWUoa4KqnV+/mYPINzyf1W969bv0jukSKcGExIl96QmRuylvBQ+d0UcOeZL/ASToPOWS34p9MfdzdvS9Q=="],
+    "lucide-solid": ["lucide-solid@0.577.0", "", { "peerDependencies": { "solid-js": "^1.4.7" } }, "sha512-r/rsauBlyNjFlUhXCkD544tOH1GgcFFupw9oP2zZT4BiFkHoO3MTr12QfKBrS5zCRIhktc/qY2tRr925hFlNuQ=="],
 
     "lz-string": ["lz-string@1.5.0", "", { "bin": { "lz-string": "bin/bin.js" } }, "sha512-h5bgJWpxJNswbU7qCrV0tIKQCaS3blPDrqKWx+QxzuzL1zGUzij9XCWLrSLsJPu5t+eWA/ycetzYAO5IOMcWAQ=="],
 
